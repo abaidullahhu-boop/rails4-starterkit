@@ -1,4 +1,4 @@
-class MoveOauthData < ActiveRecord::Migration
+class MoveOauthData < ActiveRecord::Migration[4.2]
   def up
     Authentication.unscoped.all.find_each do |auth|
       OauthCache.new(authentication: auth, data_json: auth.oauth_data_json).save! if auth.oauth_data_json.present?

@@ -1,4 +1,4 @@
-module Concerns::AuthenticationProvidersConcern
+module AuthenticationProvidersConcern
   extend ActiveSupport::Concern
 
   def provider_name
@@ -15,20 +15,25 @@ module Concerns::AuthenticationProvidersConcern
 
   module ClassMethods
     def providers(type = :login)
-      case type
-      when :login
-        Rails.application.config.auth.login_providers || Rails.application.config.auth.providers.keys
-      else
-        Rails.application.config.auth.providers.keys
-      end
+      # In the original Rails 4 app these values came from
+      # Rails.application.config.auth (backed by Settingslogic and
+      # config/auth.yml). That legacy configuration layer has been
+      # removed/disabled during the Rails 7 upgrade, so referencing it
+      # now raises `undefined method 'auth'` on the app configuration.
+      #
+      # To keep the app functional without legacy social auth, we
+      # simply disable external providers for now by returning an
+      # empty list. The login UI will hide provider buttons when this
+      # is empty.
+      []
     end
 
     def allow_multiple_for?(provider)
-      Rails.application.config.auth.allow_multiple.include? provider
+      false
     end
 
     def provider_name(provider)
-      Rails.application.config.auth.providers[provider]['name']
+      provider.to_s.titleize
     end
 
     def username_for_display(username, provider = nil)
@@ -41,7 +46,7 @@ module Concerns::AuthenticationProvidersConcern
     end
 
     def logout_url(provider)
-      Rails.application.config.auth.providers[provider]['logout']
+      '#'
     end
   end
 end

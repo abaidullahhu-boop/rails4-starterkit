@@ -23,10 +23,14 @@ module DeviseRoutesHelper
 
   def valid_after_sign_in_path?(path = request.fullpath)
     p = Addressable::URI.parse(path)
+    # In the original Rails 4 app these prefixes came from
+    # Rails.application.config.auth.omniauth/devise.path_prefix.
+    # That legacy Settingslogic-based config is no longer wired up,
+    # so we hard-code the current Devise prefix ('/a') and omit the
+    # social auth prefix (disabled for now).
     prevent_urls = [
       "^#{root_path}$",
-      "^#{Rails.application.config.auth.omniauth.path_prefix}/",
-      "^#{Rails.application.config.auth.devise.path_prefix}/"
+      "^/a/"
     ]
     p.present? and (p.host.blank? or p.host == ENV['CANONICAL_HOST']) and p.path.match(prevent_urls.join('|')).blank?
   end

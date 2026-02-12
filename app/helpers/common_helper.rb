@@ -27,7 +27,7 @@ module CommonHelper
   #   => '/a/b?test=1&data=yes'
   def add_to_url(url, params)
     uri = URI.parse(url)
-    query = URI.escape params.collect{|k,v| "#{k}=#{v}" }.join('&')
+    query = Rack::Utils.build_query(params)
     uri.query = [uri.query, query].compact.join('&')
     uri.to_s
   end

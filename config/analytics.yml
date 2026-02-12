@@ -1,12 +1,11 @@
-defaults: &defaults
+development:
   google:
     id: <%= ENV['GOOGLE_ANALYTICS_ID'].presence || nil %>
 
-development:
-  <<: *defaults
-
 test:
-  <<: *defaults
+  google:
+    id: <%= ENV['GOOGLE_ANALYTICS_ID'].presence || nil %>
 
 production:
-  <<: *defaults
+  google:
+    id: <%= ENV['GOOGLE_ANALYTICS_ID'].presence || nil %>

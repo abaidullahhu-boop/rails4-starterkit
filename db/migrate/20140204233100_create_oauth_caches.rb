@@ -1,4 +1,4 @@
-class CreateOauthCaches < ActiveRecord::Migration
+class CreateOauthCaches < ActiveRecord::Migration[4.2]
   def change
     create_table :oauth_caches, id: false, primary_key: :authentication_id do |t|
     	t.belongs_to  :authentication, 	null: false

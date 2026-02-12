@@ -1,7 +1,9 @@
 - width ||= 420
+/
+  Legacy Facebook facepile embed was removed because it depended on
+  the old Rails.application.config.auth settings, which are no longer
+  present after the Rails 7 upgrade. The markup is kept minimal here
+  so the sign-up page still renders without social widgets.
 .facepile
-  %iframe{src: "https://www.facebook.com/plugins/facepile.php?app_id=#{Rails.application.config.auth.providers.facebook.key}&width=#{width}&max_rows=4&size=medium",
-    scrolling: 'no',
-    frameborder: '0',
-    style: "border:none; overflow:hidden; width:#{width}px; height: 90px",
-    allowTransparency: 'true'}
+  %div{style: "border:none; overflow:hidden; width:#{width}px; height: 90px"}
+    <!-- social facepile disabled -->

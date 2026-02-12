@@ -1,20 +1,7 @@
-module Rails::Application::Config
-  class Auth < Settingslogic
-    source "#{Rails.root}/config/auth.yml"
-    namespace Rails.env
-    load!
-  end
-end
-
-Rails.application.config.auth = Rails::Application::Config::Auth
-
-OmniAuth.config.logger = Rails.logger
-OmniAuth.config.path_prefix = Rails.application.config.auth.omniauth.path_prefix
-
-Rails.application.config.middleware.use OmniAuth::Builder do
-  Rails.application.config.auth.providers.each do |k, v|
-    opts = (v.try(:[], 'oauth') || {}).symbolize_keys
-    opts.merge!({client_options: {ssl: {ca_file: Rails.root.join('lib/assets/certs/cacert.pem').to_s}}})
-    provider k, v['key'], v['secret'], opts
-  end
-end
+#
+# NOTE: This initializer has been disabled temporarily while upgrading the app
+# to modern Ruby and Rails. The old Settingslogic + Psych YAML aliases +
+# OmniAuth configuration here is not compatible with the current stack.
+# When re-enabling social auth, replace this with a fresh, Rails 7 compatible
+# OmniAuth configuration and a simpler YAML loader.
+#

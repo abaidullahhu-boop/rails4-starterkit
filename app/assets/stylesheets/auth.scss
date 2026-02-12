@@ -1,5 +1,8 @@
+@import "variables";
+@import "bootstrap/mixins";
+
 .auth__form {
-  @extend .row;
+  @extend .row !optional;
   max-width: 420px;
   margin: 0 auto;
 
@@ -22,7 +25,7 @@
   }
 
   ul {
-    @extend .list-unstyled;
+    @extend .list-unstyled !optional;
   }
 
   .collapse {
@@ -79,8 +82,8 @@
 }
 
 .auth__providers__provider {
-  @extend .col-xs-6;
-  @extend .col-sm-6;
+  @extend .col-xs-6 !optional;
+  @extend .col-sm-6 !optional;
   margin-bottom: 10px;
   a {
     width: 100%;

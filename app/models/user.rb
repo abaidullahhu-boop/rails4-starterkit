@@ -1,9 +1,9 @@
 class User < ActiveRecord::Base
-  include Concerns::UserImagesConcern
+  include UserImagesConcern
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
-         :confirmable, :timeoutable, :lockable, :async
+         :confirmable, :timeoutable, :lockable
 
   has_many :authentications, dependent: :destroy, validate: false, inverse_of: :user do
     def grouped_with_oauth
@@ -12,6 +12,18 @@ class User < ActiveRecord::Base
   end
 
   after_create :send_welcome_emails
+
+  # Some legacy records (or partially-created users from earlier failed
+  # upgrades) may have an `encrypted_password` that is not a valid
+  # BCrypt hash for the current bcrypt version. When Devise calls
+  # `valid_password?`, BCrypt will raise `BCrypt::Errors::InvalidHash`.
+  # To avoid hard failures during signup/login, we treat such hashes as
+  # simply invalid credentials.
+  def valid_password?(password)
+    super
+  rescue BCrypt::Errors::InvalidHash
+    false
+  end
 
   def display_name
     first_name.presence || email.split('@')[0]
@@ -57,7 +69,9 @@ class User < ActiveRecord::Base
   end
 
   def send_welcome_emails
-    UserMailer.delay.welcome_email(self.id)
-    # UserMailer.delay_for(5.days).find_more_friends_email(self.id)
+    # Original app used Sidekiq/Redis via `delay`, which is not wired up
+    # (and uses legacy Redis APIs). For now, send the welcome email
+    # synchronously to avoid background job/Redis issues.
+    UserMailer.welcome_email(self).deliver_now
   end
 end

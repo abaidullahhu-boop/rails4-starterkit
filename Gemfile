@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
-ruby '2.1.3'
 
-gem 'rails', '~> 4.1.6'
+ruby '3.3.4'
+
+gem 'rails', '~> 7.1.3'
 
 #
 # PLATFORM SPECIFIC
@@ -17,20 +18,29 @@ gem 'terminal-notifier', group: [:development]
 
 # Monitoring
 gem 'rack-timeout', '~> 0.1.0beta4'
-gem 'newrelic_rpm'
-gem 'airbrake', '~> 3.2.1'         # use with airbrake.io or errbit
+# gem 'newrelic_rpm'               # very old version; incompatible with Ruby 3.3 (uses Fixnum, etc.)
+# gem 'airbrake', '~> 3.2.1'       # very old version; incompatible with Ruby 3.3 (Fixnum in builder)
 # gem 'airbrake_user_attributes'  # use with self-hosted errbit; see config/initializers/airbrake.rb
 # gem 'rack-google-analytics'
 
 # Data
-gem 'pg'
+gem 'pg', '~> 1.1'
 gem 'dalli'                     # memcached
 # gem 'schema_plus'             # add better index and foreign key support
 # gem 'jbuilder'
 
+# Web / Server
+gem 'puma', '~> 6.4'
+gem 'webrick', '~> 1.8'
+
+# Core / JSON
+# Force a modern json gem compatible with Ruby 3.3 (older 1.8.x releases won't compile)
+gem 'json', '~> 2.7'
+
 # Assets
 gem 'sass-rails'
-gem 'haml-rails'
+gem 'haml', '~> 6.3'
+gem 'haml-rails', '~> 2.1'
 gem 'simple_form'
 gem 'uglifier'
 gem 'headjs-rails'
@@ -48,35 +58,38 @@ gem 'coffee-rails'
 # gem 'therubyracer', platforms: :ruby
 
 # Design
-gem 'bootstrap-sass'
+# gem 'bootstrap-sass'
+gem 'bootstrap-sass', '~> 3.4.1'
 # gem 'bourbon'
 # gem 'neat'
 # gem 'country_select'
 
 # Email
-gem 'premailer-rails'
+# gem 'premailer-rails'           # old css_parser version incompatible with modern Ruby Regexp API
 
 # Authentication
 gem 'devise'
 gem 'cancancan', '~> 1.9'
 gem 'omniauth'
 gem 'omniauth-facebook'
-gem 'omniauth-twitter'
+# gem 'omniauth-twitter'
 # gem 'omniauth-persona'
 # gem 'omniauth-google-oauth2'
 # gem 'omniauth-linkedin'
 
 # Admin
-gem 'rails_admin'
+# gem 'rails_admin'              # old version depends on kaminari, which uses alias_method_chain not present in Rails 7
 
 # Workers
 gem 'sidekiq'
-gem 'devise-async'
+# gem 'devise-async'              # legacy Devise extension; incompatible behavior on modern Devise/Ruby
 gem 'sinatra', require: false
 
 # Utils
 gem 'addressable'
 gem 'settingslogic'
+gem 'ffi', '~> 1.16'
+gem 'bcrypt', '~> 3.1.20'
 
 group :development do
   # Docs
@@ -91,7 +104,7 @@ group :development do
   # gem 'capistrano'
 
   # Guard
-  gem 'guard-rspec'
+  # gem 'guard-rspec'             # old guard/pry versions incompatible with Ruby 3.3
   # gem 'guard-livereload'
   # gem 'rack-livereload'
 end
@@ -105,9 +118,9 @@ group :development, :test do
   # Debugging
   # gem 'pry'                   # better than irb
   # gem 'byebug'                # ruby 2.0 debugger with built-in pry
-  gem 'pry-rails'               # adds rails specific commands to pry
-  gem 'pry-byebug'              # add debugging commands to pry
-  gem 'pry-stack_explorer'      # navigate call stack
+  # gem 'pry-rails'             # adds rails specific commands to pry (old version incompatible with Ruby 3.3)
+  # gem 'pry-byebug'            # add debugging commands to pry (incompatible with Ruby 3.3 with this version)
+  # gem 'pry-stack_explorer'    # navigate call stack (pulls in binding_of_caller which is incompatible with Ruby 3.3)
   # gem 'pry-rescue'            # start pry session on uncaught exception
   # gem 'pry-doc'               # browse docs from console
   # gem 'pry-git'               # add git support to console
@@ -117,17 +130,17 @@ group :development, :test do
   gem 'awesome_print'           # pretty pring debugging output
 
   # Testing
-  gem 'rspec-rails'
+  # gem 'rspec-rails'             # temporarily disabled; old rspec/rake integration incompatible with modern Rake
   gem 'factory_girl_rails'
   gem 'ffaker'
-  gem 'capybara-webkit'
+  # gem 'capybara-webkit'       # requires Qt/qmake and is very outdated; replace with modern drivers if needed
   # gem 'poltergeist'           # alternative to capybara-webkit
   # gem 'capybara-firebug'
   # gem 'launchy'               # save_and_open_page support for rspec
   # gem 'zeus-parallel_tests'   # speed up lengthy tests
 
   # Logging
-  gem 'quiet_assets'
+  # gem 'quiet_assets'
 end
 
 group :test do
@@ -144,6 +157,10 @@ group :test do
 
   gem 'rspec-sidekiq'
   gem 'rspec-activemodel-mocks'
+end
+group :development, :test do
+
+  gem 'byebug', platforms: :mri
 end
 
 group :production do

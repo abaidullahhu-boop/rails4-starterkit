@@ -1,49 +1,50 @@
---
--- PostgreSQL database dump
---
+\restrict qV4WStrXqLnfJzUker9Vva6Sqh0zpLs1YS5WHD3OoY5WfbnMp2eY6A4jE2z23hJ
+
+-- Dumped from database version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
+-- Dumped by pg_dump version 16.11 (Ubuntu 16.11-0ubuntu0.24.04.1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
-
---
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
---
-
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
-
-
---
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: -
---
-
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
-
-
-SET search_path = public, pg_catalog;
+SET row_security = off;
 
 SET default_tablespace = '';
 
-SET default_with_oids = false;
+SET default_table_access_method = heap;
 
 --
--- Name: authentications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE authentications (
+CREATE TABLE public.ar_internal_metadata (
+    key character varying NOT NULL,
+    value character varying,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: authentications; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.authentications (
     id integer NOT NULL,
     user_id integer,
-    provider character varying(255) NOT NULL,
-    proid character varying(255) NOT NULL,
-    token character varying(255),
-    refresh_token character varying(255),
-    secret character varying(255),
+    provider character varying NOT NULL,
+    proid character varying NOT NULL,
+    token character varying,
+    refresh_token character varying,
+    secret character varying,
     expires_at timestamp without time zone,
-    username character varying(255),
-    image_url character varying(255),
+    username character varying,
+    image_url character varying,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
 );
@@ -53,7 +54,8 @@ CREATE TABLE authentications (
 -- Name: authentications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE authentications_id_seq
+CREATE SEQUENCE public.authentications_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -65,14 +67,14 @@ CREATE SEQUENCE authentications_id_seq
 -- Name: authentications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE authentications_id_seq OWNED BY authentications.id;
+ALTER SEQUENCE public.authentications_id_seq OWNED BY public.authentications.id;
 
 
 --
--- Name: oauth_caches; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: oauth_caches; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE oauth_caches (
+CREATE TABLE public.oauth_caches (
     authentication_id integer NOT NULL,
     data_json text NOT NULL,
     created_at timestamp without time zone,
@@ -81,15 +83,15 @@ CREATE TABLE oauth_caches (
 
 
 --
--- Name: rails_admin_histories; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: rails_admin_histories; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE rails_admin_histories (
+CREATE TABLE public.rails_admin_histories (
     id integer NOT NULL,
     message text,
-    username character varying(255),
+    username character varying,
     item integer,
-    "table" character varying(255),
+    "table" character varying,
     month smallint,
     year bigint,
     created_at timestamp without time zone,
@@ -101,7 +103,8 @@ CREATE TABLE rails_admin_histories (
 -- Name: rails_admin_histories_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE rails_admin_histories_id_seq
+CREATE SEQUENCE public.rails_admin_histories_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -113,43 +116,43 @@ CREATE SEQUENCE rails_admin_histories_id_seq
 -- Name: rails_admin_histories_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE rails_admin_histories_id_seq OWNED BY rails_admin_histories.id;
+ALTER SEQUENCE public.rails_admin_histories_id_seq OWNED BY public.rails_admin_histories.id;
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE schema_migrations (
-    version character varying(255) NOT NULL
+CREATE TABLE public.schema_migrations (
+    version character varying NOT NULL
 );
 
 
 --
--- Name: users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: users; Type: TABLE; Schema: public; Owner: -
 --
 
-CREATE TABLE users (
+CREATE TABLE public.users (
     id integer NOT NULL,
-    first_name character varying(255),
-    last_name character varying(255),
-    image_url character varying(255),
-    email character varying(255) DEFAULT ''::character varying NOT NULL,
-    encrypted_password character varying(255) DEFAULT ''::character varying NOT NULL,
-    reset_password_token character varying(255),
+    first_name character varying,
+    last_name character varying,
+    image_url character varying,
+    email character varying DEFAULT ''::character varying NOT NULL,
+    encrypted_password character varying DEFAULT ''::character varying NOT NULL,
+    reset_password_token character varying,
     reset_password_sent_at timestamp without time zone,
     remember_created_at timestamp without time zone,
     sign_in_count integer DEFAULT 0 NOT NULL,
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
-    current_sign_in_ip character varying(255),
-    last_sign_in_ip character varying(255),
-    confirmation_token character varying(255),
+    current_sign_in_ip character varying,
+    last_sign_in_ip character varying,
+    confirmation_token character varying,
     confirmed_at timestamp without time zone,
     confirmation_sent_at timestamp without time zone,
-    unconfirmed_email character varying(255),
+    unconfirmed_email character varying,
     failed_attempts integer DEFAULT 0 NOT NULL,
-    unlock_token character varying(255),
+    unlock_token character varying,
     locked_at timestamp without time zone,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
@@ -161,7 +164,8 @@ CREATE TABLE users (
 -- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
 --
 
-CREATE SEQUENCE users_id_seq
+CREATE SEQUENCE public.users_id_seq
+    AS integer
     START WITH 1
     INCREMENT BY 1
     NO MINVALUE
@@ -173,118 +177,125 @@ CREATE SEQUENCE users_id_seq
 -- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
 --
 
-ALTER SEQUENCE users_id_seq OWNED BY users.id;
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: authentications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY authentications ALTER COLUMN id SET DEFAULT nextval('authentications_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY rails_admin_histories ALTER COLUMN id SET DEFAULT nextval('rails_admin_histories_id_seq'::regclass);
+ALTER TABLE ONLY public.authentications ALTER COLUMN id SET DEFAULT nextval('public.authentications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: rails_admin_histories id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+ALTER TABLE ONLY public.rails_admin_histories ALTER COLUMN id SET DEFAULT nextval('public.rails_admin_histories_id_seq'::regclass);
 
 
 --
--- Name: authentications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY authentications
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
+-- Name: ar_internal_metadata ar_internal_metadata_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ar_internal_metadata
+    ADD CONSTRAINT ar_internal_metadata_pkey PRIMARY KEY (key);
+
+
+--
+-- Name: authentications authentications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.authentications
     ADD CONSTRAINT authentications_pkey PRIMARY KEY (id);
 
 
 --
--- Name: rails_admin_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: rails_admin_histories rails_admin_histories_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY rails_admin_histories
+ALTER TABLE ONLY public.rails_admin_histories
     ADD CONSTRAINT rails_admin_histories_pkey PRIMARY KEY (id);
 
 
 --
--- Name: users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY users
+ALTER TABLE ONLY public.schema_migrations
+    ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
     ADD CONSTRAINT users_pkey PRIMARY KEY (id);
 
 
 --
--- Name: index_authentications_on_provider; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_authentications_on_provider; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_authentications_on_provider ON authentications USING btree (provider);
-
-
---
--- Name: index_rails_admin_histories; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_rails_admin_histories ON rails_admin_histories USING btree (item, "table", month, year);
+CREATE INDEX index_authentications_on_provider ON public.authentications USING btree (provider);
 
 
 --
--- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_rails_admin_histories; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_confirmation_token ON users USING btree (confirmation_token);
-
-
---
--- Name: index_users_on_lower_email_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_users_on_lower_email_index ON users USING btree (lower((email)::text));
+CREATE INDEX index_rails_admin_histories ON public.rails_admin_histories USING btree (item, "table", month, year);
 
 
 --
--- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_confirmation_token; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX index_users_on_reset_password_token ON users USING btree (reset_password_token);
-
-
---
--- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_users_on_unlock_token ON users USING btree (unlock_token);
+CREATE UNIQUE INDEX index_users_on_confirmation_token ON public.users USING btree (confirmation_token);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_users_on_lower_email_index; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
+CREATE UNIQUE INDEX index_users_on_lower_email_index ON public.users USING btree (lower((email)::text));
+
+
+--
+-- Name: index_users_on_reset_password_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: index_users_on_unlock_token; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_users_on_unlock_token ON public.users USING btree (unlock_token);
 
 
 --
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+\unrestrict qV4WStrXqLnfJzUker9Vva6Sqh0zpLs1YS5WHD3OoY5WfbnMp2eY6A4jE2z23hJ
 
-INSERT INTO schema_migrations (version) VALUES ('20130909170542');
+SET search_path TO "$user", public;
 
-INSERT INTO schema_migrations (version) VALUES ('20130909194719');
-
-INSERT INTO schema_migrations (version) VALUES ('20131020063216');
-
-INSERT INTO schema_migrations (version) VALUES ('20131021224642');
-
-INSERT INTO schema_migrations (version) VALUES ('20140204233100');
-
-INSERT INTO schema_migrations (version) VALUES ('20140204233952');
+INSERT INTO "schema_migrations" (version) VALUES
+('20140204233952'),
+('20140204233100'),
+('20131021224642'),
+('20131020063216'),
+('20130909194719'),
+('20130909170542');
 

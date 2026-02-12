@@ -1,3 +1,5 @@
+@import "variables";
+
 .card__user {
   background-color: $well-bg;
   border-radius: $border-radius-base;
@@ -35,15 +37,15 @@
 .card__actions {
   margin-top: 5px;
   a {
-    @extend .btn;
-    @extend .btn-default;
-    @extend .btn-xs;
+    @extend .btn !optional;
+    @extend .btn-default !optional;
+    @extend .btn-xs !optional;
     margin-right: 2px;
   }
 }
 
 .card__close {
-  @extend .close;
+  @extend .close !optional;
   position: absolute;
   top: 0;
   right: 3px;

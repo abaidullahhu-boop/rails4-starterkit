@@ -14,21 +14,25 @@ Rails.application.routes.draw do
   get '/terms' => 'pages#terms', as: 'terms'
   get '/privacy' => 'pages#privacy', as: 'privacy'
 
-  # OAuth
-  oauth_prefix = Rails.application.config.auth.omniauth.path_prefix
-  get "#{oauth_prefix}/:provider/callback" => 'users/oauth#create'
-  get "#{oauth_prefix}/failure" => 'users/oauth#failure'
-  get "#{oauth_prefix}/:provider" => 'users/oauth#passthru', as: 'provider_auth'
-  get oauth_prefix => redirect("#{oauth_prefix}/login")
+  # OAuth (temporarily disabled while legacy OmniAuth config is removed)
+  # oauth_prefix = Rails.application.config.auth.omniauth.path_prefix
+  # get "#{oauth_prefix}/:provider/callback" => 'users/oauth#create'
+  # get "#{oauth_prefix}/failure" => 'users/oauth#failure'
+  # get "#{oauth_prefix}/:provider" => 'users/oauth#passthru', as: 'provider_auth'
+  # get oauth_prefix => redirect("#{oauth_prefix}/login")
 
   # Devise
-  devise_prefix = Rails.application.config.auth.devise.path_prefix
+  devise_prefix = '/a'
   devise_for :users, path: devise_prefix,
     controllers: {registrations: 'users/registrations', sessions: 'users/sessions',
       passwords: 'users/passwords', confirmations: 'users/confirmations', unlocks: 'users/unlocks'},
     path_names: {sign_up: 'signup', sign_in: 'login', sign_out: 'logout'}
   devise_scope :user do
-    get "#{devise_prefix}/after" => 'users/registrations#after_auth', as: 'user_root'
+    # After login or signup, send users to their dashboard/home.
+    # The original app used Users::Registrations#after_auth with
+    # OAuth-specific logic; that's been removed, so we point this
+    # route directly to the logged-in home page instead.
+    get "#{devise_prefix}/after" => 'pages#home', as: 'user_root'
   end
   get devise_prefix => redirect('/a/signup')
 

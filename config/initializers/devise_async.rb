@@ -1,7 +1,5 @@
-if defined? Devise::Async
-  Devise::Async.setup do |config|
-    # config.enabled = false
-    config.backend = :sidekiq
-    config.queue = :mailer
-  end
-end
+#
+# Legacy Devise::Async configuration disabled for compatibility with
+# modern Devise / Rails versions. If you want async mailers, configure
+# them using the currently supported approach for your Devise version.
+#

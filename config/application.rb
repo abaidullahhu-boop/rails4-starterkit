@@ -21,11 +21,10 @@ module StarterKit
     config.active_record.schema_format = :sql
 
     # Cache
-    # config.cache_store = :memory_store
-    # config.cache_store = :mem_cache_store, ENV['MEMCACHE_SERVERS].split(','),
-    #   { namespace: Rails.application.config.settings.app_name, expires_in: 30.day, compress: true }
-    # Set cache_store the same for all environments to avoid inconsistency issues
-    config.cache_store = :dalli_store
+    # For Rails 7 we avoid the old Dalli/memcached stack by default and
+    # use the in-process memory store. You can switch back to a shared
+    # cache (Redis, Memcached, etc.) later if needed.
+    config.cache_store = :memory_store
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers

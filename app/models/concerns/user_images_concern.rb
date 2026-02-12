@@ -1,4 +1,4 @@
-module Concerns::UserImagesConcern
+module UserImagesConcern
   extend ActiveSupport::Concern
 
   included do
@@ -16,8 +16,11 @@ module Concerns::UserImagesConcern
 
   # ssl: true|false
   # size: :tiny|:thumb|:large
-  def image_url(*opts)
-    sized_image_url(self[:image_url], *opts) || gravatar_url(*opts)
+  # Ruby 3 requires explicit keyword arguments; avoid passing option
+  # hashes positionally.
+  def image_url(size: :thumb, ssl: true)
+    sized_image_url(self[:image_url], size: size, ssl: ssl) ||
+      gravatar_url(size: size, ssl: ssl)
   end
 
   def sized_image_url(url, size: :thumb, ssl: true)
